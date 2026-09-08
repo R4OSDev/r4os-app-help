@@ -29,8 +29,7 @@ pub fn r4_app_main(contract: *r4os.App) i32 {
         return 0;
     }
     if (equalsIgnoreCase(args, "/S") or equalsIgnoreCase(args, "-S") or equalsIgnoreCase(args, "S") or equalsIgnoreCase(args, "SOFTWARE") or equalsIgnoreCase(args, "/SOFTWARE")) {
-        printSoftware(&app);
-        return 0;
+        return if (printSoftware(&app)) 0 else 1;
     }
     if (equalsIgnoreCase(args, "/?") or equalsIgnoreCase(args, "-?") or equalsIgnoreCase(args, "/HELP") or equalsIgnoreCase(args, "--HELP")) {
         printUsage(&app);
@@ -115,7 +114,7 @@ fn printLimitedCommands(app: *const App) void {
     printEntry(app, "|/<", "Recognized, not available yet", command_column);
 }
 
-fn printSoftware(app: *const App) void {
+fn printSoftware(app: *const App) bool {
     app.line("R4OS Terminal Software");
     app.line("======================");
     app.line("");
@@ -125,23 +124,31 @@ fn printSoftware(app: *const App) void {
     if (path_len_raw < 0) {
         app.line("  <PATH unavailable>");
         app.line("");
-        app.line("Programs found: 0");
-        return;
+        app.line("Listing incomplete");
+        return false;
     }
     const path = path_env[0..@as(usize, @intCast(path_len_raw))];
     app.write("  ");
     app.line(path);
 
     var total: u32 = 0;
+    var complete = true;
     var pos: usize = 0;
     while (nextPathDirectory(path, &pos)) |dir| {
-        total += printSoftwareDir(app, dir);
+        if (printSoftwareDir(app, dir)) |count| total += count else {
+            complete = false;
+        }
     }
 
     app.line("");
+    if (!complete) {
+        app.line("Listing incomplete; directory read failed");
+        return false;
+    }
     app.write("Programs found: ");
     writeDec(app, total);
     app.line("");
+    return true;
 }
 
 fn printUsage(app: *const App) void {
@@ -152,13 +159,13 @@ fn printUsage(app: *const App) void {
     app.line("  HELP /S    List software in the Terminal PATH");
 }
 
-fn printSoftwareDir(app: *const App, dir: []const u8) u32 {
+fn printSoftwareDir(app: *const App, dir: []const u8) ?u32 {
     app.line("");
     app.line(dir);
 
     var directory = r4os.FilePath.parse(dir) catch {
         app.line("  <path too long>");
-        return 0;
+        return null;
     };
 
     var entry_buf: [dir_entry_max]u8 = .{0} ** dir_entry_max;
@@ -168,7 +175,10 @@ fn printSoftwareDir(app: *const App, dir: []const u8) u32 {
         const entry = switch (iterator.next(entry_buf[0..])) {
             .entry => |entry| entry,
             .end => break,
-            .failure => break,
+            .failure => {
+                app.line("  <directory read failed; listing incomplete>");
+                return null;
+            },
         };
         if (entry.kind != .file) continue;
         const full = entry.path;
