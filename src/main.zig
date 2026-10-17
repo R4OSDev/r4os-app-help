@@ -215,8 +215,6 @@ fn softwareSummary(name: []const u8) []const u8 {
     if (equalsIgnoreCase(name, "NETCAT")) return "TCP client";
     if (equalsIgnoreCase(name, "TCPECHO")) return "TCP echo test";
     if (equalsIgnoreCase(name, "HTTPGET")) return "HTTP GET client";
-    if (equalsIgnoreCase(name, "SEND")) return "Serial-link send";
-    if (equalsIgnoreCase(name, "RECV")) return "Serial-link receive";
     if (equalsIgnoreCase(name, "BEEP")) return "Audio beep test";
     if (equalsIgnoreCase(name, "SYNTH")) return "Synth/audio player";
     if (equalsIgnoreCase(name, "R4CFGD")) return "Config diagnostics";
@@ -226,7 +224,6 @@ fn softwareSummary(name: []const u8) []const u8 {
     if (equalsIgnoreCase(name, "SPECTRA")) return "Kernel measurements, logs, checks and benchmarks";
     if (equalsIgnoreCase(name, "APPHEAPD")) return "Application heap diagnostics";
     if (equalsIgnoreCase(name, "NETR4P")) return "Network protocol diagnostics";
-    if (equalsIgnoreCase(name, "R4SLD")) return "Serial-link diagnostics";
     if (equalsIgnoreCase(name, "USBDIAG")) return "USB diagnostics";
     if (equalsIgnoreCase(name, "STORDIAG")) return "Storage diagnostics";
     if (equalsIgnoreCase(name, "DISPLAYD")) return "Display diagnostics";
