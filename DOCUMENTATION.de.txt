@@ -23,3 +23,9 @@ Contract:
 - App-Klasse: `console`
 - Zielpfad im Image: `C:\R4OS\SOFTWARE\TERMINAL\HELP.R4X`
 
+API-Migration 0.90.68
+---------------------
+HELP7 verwendet normalen App2-/Query2-Konsolenstart aus SDK201/Contract93.
+Der gemeinsame Files-Iterator liest PATH-Verzeichnisse ueber ganze
+Generation2-Metadatenbatches. Vorhandene Befehls-/Alias-/Ausgabeformate bilden
+den Vertrag. Unvollstaendige Verzeichnislisten liefern ihren Fehlerstatus.

@@ -20,7 +20,7 @@ const App = struct {
     }
 };
 
-pub fn r4_app_main(contract: *r4os.App) i32 {
+pub fn r4_app_main(contract: *r4os.App2) i32 {
     const files = contract.files() orelse return r4os.abi.err_no_fn;
     const app = App{ .sys = contract.system(), .files = files };
     const args = trim(contract.args());

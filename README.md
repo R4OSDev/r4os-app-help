@@ -4,7 +4,7 @@
 
 ## Package
 
-- Version: `0.1.5`
+- Version: `0.1.7`
 - Image target: `/R4OS/SOFTWARE/TERMINAL/HELP.R4X`
 - Image scope: `full`
 - Canonical project manifest: `module.R4MF`
@@ -38,3 +38,10 @@ Detailed German technical notes from the migration are preserved in
 Original R4OS material is licensed under Apache License 2.0. See `LICENSE`
 and `NOTICE`. Any repository-specific external material is documented in
 `THIRD_PARTY_NOTICES.md`.
+
+API migration 0.90.68
+---------------------
+HELP uses the normal SDK201 App2/Query2 console entry. Its shared Files
+iterator selects generation2 metadata directory batches for PATH listings.
+Existing aliases, built-in help, software descriptions and output columns
+remain the command contract. Incomplete listings retain their failure status.
